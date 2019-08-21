@@ -636,8 +636,8 @@ class TradingWidget(QtWidgets.QWidget):
         form1.addRow("价格", self.price_line)
         form1.addRow("数量", self.volume_line)
         form1.addRow("接口", self.gateway_combo)
-        form1.addRow(send_button)
-        form1.addRow(cancel_button)
+        #form1.addRow(send_button)
+        #form1.addRow(cancel_button)
 
         # Market depth display area
         """

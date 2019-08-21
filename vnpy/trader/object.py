@@ -282,6 +282,10 @@ class OrderRequest:
         """"""
         self.vt_symbol = f"{self.symbol}.{self.exchange.value}"
 
+    def to_tradeagent_json(self):
+        obj = {
+            
+		}
     def create_order_data(self, orderid: str, gateway_name: str):
         """
         Create order data from request.

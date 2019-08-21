@@ -1,1 +1,1 @@
-from .websocket_client import WebsocketClient
+from .websocket_ta_client import WebsocketTAClient

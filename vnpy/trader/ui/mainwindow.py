@@ -8,6 +8,8 @@ from importlib import import_module
 from typing import Callable
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import QKeySequence
+from PyQt5.QtWidgets import QShortcut
 
 from vnpy.event import EventEngine
 from .widget import (
@@ -54,20 +56,29 @@ class MainWindow(QtWidgets.QMainWindow):
         self.init_menu()
         self.load_window_setting("custom")
 
+    def special_key(self):
+        widget_bind = self.focusWidget()
+        print(widget_bind.getParent())
+        print(self.focusWidget())
+
     def init_dock(self):
         """"""
         trading_widget, trading_dock = self.create_dock(
             TradingWidget, "交易1", QtCore.Qt.TopDockWidgetArea
         )
+        QShortcut(QKeySequence("F1"), self, self.special_key)
+
         trading_widget2, trading_dock2 = self.create_dock(
             TradingWidget, "交易2", QtCore.Qt.TopDockWidgetArea
         )
         trading_widget3, trading_dock3 = self.create_dock(
             TradingWidget, "交易3", QtCore.Qt.TopDockWidgetArea
         )
+
         trading_widget4, trading_dock4 = self.create_dock(
             TradingWidget, "交易4", QtCore.Qt.TopDockWidgetArea
         )
+
 
         account_widget, account_dock = self.create_dock(
             AccountMonitor, "资金", QtCore.Qt.BottomDockWidgetArea
