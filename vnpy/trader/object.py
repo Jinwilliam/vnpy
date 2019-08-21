@@ -5,6 +5,7 @@ Basic data structure used for general trading function in VN Trader.
 from dataclasses import dataclass
 from datetime import datetime
 from logging import INFO
+import json
 
 from .constant import Direction, Exchange, Interval, Offset, Status, Product, OptionType, OrderType
 
@@ -282,10 +283,17 @@ class OrderRequest:
         """"""
         self.vt_symbol = f"{self.symbol}.{self.exchange.value}"
 
-    def to_tradeagent_json(self):
+    def to_dict(self):
         obj = {
-            
-		}
+            'symbol': self.symbol,
+            'exchange': self.exchange.name,
+            'direction': self.direction.name,
+            'type': self.type.name,
+            'volume': self.volume,
+            'price': self.price,
+            'offset': self.offset.name
+        }
+        return obj
     def create_order_data(self, orderid: str, gateway_name: str):
         """
         Create order data from request.

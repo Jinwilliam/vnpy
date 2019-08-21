@@ -62,7 +62,7 @@ class MainWindow(QtWidgets.QMainWindow):
         widget_parent = widget_bind.parent()
         widget_parent_type = type(widget_parent)
         if widget_parent_type == TradingWidget:
-            print(widget_bind)
+            #print(widget_bind)
             widget_parent.send_order()
 
     def init_dock(self):
@@ -75,6 +75,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.trading_boards[i], self.trading_docks[i] = self.create_dock(
                 TradingWidget, "交易{}".format(i+1), QtCore.Qt.TopDockWidgetArea
             )
+            self.trading_boards[i].init_ui()
 
         account_widget, account_dock = self.create_dock(
             AccountMonitor, "资金", QtCore.Qt.BottomDockWidgetArea

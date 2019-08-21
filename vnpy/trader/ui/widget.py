@@ -572,24 +572,28 @@ class TradingWidget(QtWidgets.QWidget):
     def __init__(self, main_engine: MainEngine, event_engine: EventEngine):
         """"""
         super(TradingWidget, self).__init__()
-
         self.main_engine = main_engine
         self.event_engine = event_engine
 
         self.vt_symbol = ""
 
-        self.init_ui()
-        self.register_event()
+        #self.init_ui() ## call out side
+        #self.register_event()
 
     def init_ui(self):
         """"""
+        self.trading_board_id = self.parent().objectName()
+        custom_data = get_reg(self.trading_board_id)
         #self.setFixedWidth(300)
         self.setMaximumHeight(300)
 
         # Trading function area
         exchanges = self.main_engine.get_all_exchanges()
         self.exchange_combo = QtWidgets.QComboBox()
-        self.exchange_combo.addItems([exchange.value for exchange in exchanges])
+        hist_exchange_combo = custom_data.get("exchange", None)
+        if hist_exchange_combo:
+            self.exchange_combo.addItem(custom_data.get("exchange", ""))
+        self.exchange_combo.addItems([exchange.value for exchange in exchanges if exchange != hist_exchange_combo])
 
         self.symbol_line = QtWidgets.QLineEdit()
         self.symbol_line.returnPressed.connect(self.set_vt_symbol)
@@ -788,8 +792,9 @@ class TradingWidget(QtWidgets.QWidget):
             offset=Offset(str(self.offset_combo.currentText())),
         )
 
-        gateway_name = str(self.gateway_combo.currentText())
+        write_reg(self.trading_board_id, req.to_dict())
 
+        gateway_name = str(self.gateway_combo.currentText())
         self.main_engine.send_order(req, gateway_name)
 
     def cancel_all(self):

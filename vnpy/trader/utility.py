@@ -41,7 +41,7 @@ def get_reg(setting_item):
             ret = json.loads(ret)
     except Exception as e:
         ret = {}
-    print(ret)
+    #print(ret)
     return ret
 
 def _get_trader_dir(temp_name: str):
