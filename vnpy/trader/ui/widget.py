@@ -21,8 +21,8 @@ from ..event import (
     EVENT_LOG
 )
 from ..object import OrderRequest, SubscribeRequest
-from ..utility import load_json, save_json
-from ..setting import SETTING_FILENAME, SETTINGS
+from ..utility import load_json, save_json, write_reg, get_reg
+from ..setting import SETTING_FILENAME, SETTINGS, SETTINGS_CN
 
 
 COLOR_LONG = QtGui.QColor("red")
@@ -510,7 +510,7 @@ class ConnectDialog(QtWidgets.QDialog):
             self.gateway_name)
 
         # Saved setting provides field data used last time.
-        loaded_setting = load_json(self.filename)
+        loaded_setting = get_reg(self.filename)
 
         # Initialize line edits and form layout based on setting.
         form = QtWidgets.QFormLayout()
@@ -1030,16 +1030,17 @@ class GlobalDialog(QtWidgets.QDialog):
         self.setMinimumWidth(800)
 
         settings = copy(SETTINGS)
-        settings.update(load_json(SETTING_FILENAME))
+        settings.update(get_reg(SETTING_FILENAME))
 
         # Initialize line edits and form layout based on setting.
         form = QtWidgets.QFormLayout()
 
         for field_name, field_value in settings.items():
             field_type = type(field_value)
+            field_name_cn = SETTINGS_CN.get(field_name, field_name)
             widget = QtWidgets.QLineEdit(str(field_value))
 
-            form.addRow(f"{field_name} <{field_type.__name__}>", widget)
+            form.addRow(f"{field_name_cn} <{field_type.__name__}>", widget)
             self.widgets[field_name] = (widget, field_type)
 
         button = QtWidgets.QPushButton("确定")
@@ -1074,5 +1075,5 @@ class GlobalDialog(QtWidgets.QDialog):
             QtWidgets.QMessageBox.Ok
         )
 
-        save_json(SETTING_FILENAME, settings)
+        write_reg(SETTING_FILENAME, settings)
         self.accept()

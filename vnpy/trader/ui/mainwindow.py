@@ -27,7 +27,7 @@ from .widget import (
     GlobalDialog
 )
 from ..engine import MainEngine
-from ..utility import get_icon_path, TRADER_DIR
+from ..utility import get_icon_path
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -41,7 +41,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.main_engine = main_engine
         self.event_engine = event_engine
 
-        self.window_title = f"VN Trader [{TRADER_DIR}]"
+        self.window_title = f"VN Trader TradeAgent"
 
         self.connect_dialogs = {}
         self.widgets = {}
@@ -58,16 +58,18 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def special_key(self):
         widget_bind = self.focusWidget()
-        print(widget_bind.getParent())
-        print(self.focusWidget())
+        widget_parent = widget_bind.parent()
+        widget_parent_type = type(widget_parent)
+        if widget_parent_type == TradingWidget:
+            print(widget_bind)
+            widget_parent.send_order()
 
     def init_dock(self):
         """"""
+        QShortcut(QKeySequence("F1"), self, self.special_key)
         trading_widget, trading_dock = self.create_dock(
             TradingWidget, "交易1", QtCore.Qt.TopDockWidgetArea
         )
-        QShortcut(QKeySequence("F1"), self, self.special_key)
-
         trading_widget2, trading_dock2 = self.create_dock(
             TradingWidget, "交易2", QtCore.Qt.TopDockWidgetArea
         )

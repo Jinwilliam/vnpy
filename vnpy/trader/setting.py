@@ -4,9 +4,10 @@ Global setting of VN Trader.
 
 from logging import CRITICAL,INFO
 
-from .utility import load_json
+from .utility import load_json, get_reg
 
 SETTINGS = {
+    "tradeagent.trading_boards": 4,
     "font.family": "Arial",
     "font.size": 12,
 
@@ -14,29 +15,21 @@ SETTINGS = {
     "log.level": INFO,#CRITICAL,
     "log.console": True,
     "log.file": True,
+}
+SETTINGS_CN = {
+    "tradeagent.trading_boards": "交易窗口数量",
+    "font.family": "字体",
+    "font.size": "字体大小",
 
-    "email.server": "smtp.qq.com",
-    "email.port": 465,
-    "email.username": "",
-    "email.password": "",
-    "email.sender": "",
-    "email.receiver": "",
-
-    "rqdata.username": "",
-    "rqdata.password": "",
-
-    "database.driver": "sqlite",  # see database.Driver
-    "database.database": "database.db",  # for sqlite, use this as filepath
-    "database.host": "localhost",
-    "database.port": 3306,
-    "database.user": "root",
-    "database.password": "",
-    "database.authentication_source": "admin",  # for mongodb
+    "log.active": "日志开关",
+    "log.level": "日志级别",
+    "log.console": "日志后台开关",
+    "log.file": "日志文件",
 }
 
 # Load global setting from json file.
 SETTING_FILENAME = "vt_setting.json"
-SETTINGS.update(load_json(SETTING_FILENAME))
+SETTINGS.update(get_reg(SETTING_FILENAME))
 
 
 def get_settings(prefix: str = ""):

@@ -3,6 +3,7 @@ General utility functions.
 """
 
 import json
+import winreg
 from pathlib import Path
 from typing import Callable
 
@@ -12,7 +13,7 @@ import talib
 from .object import BarData, TickData
 from .constant import Exchange, Interval
 
-
+SETTING_REG_PATH = r'Control Panel\TradeAgent\settings'
 def extract_vt_symbol(vt_symbol: str):
     """
     :return: (symbol, exchange)
@@ -27,6 +28,21 @@ def generate_vt_symbol(symbol: str, exchange: Exchange):
     """
     return f"{symbol}.{exchange.value}"
 
+
+def write_reg(setting_item, setting_obj):
+    key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, SETTING_REG_PATH)
+    ret = winreg.SetValueEx(key, setting_item, 0, winreg.REG_SZ, json.dumps(setting_obj))
+
+def get_reg(setting_item):
+    try:
+        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, SETTING_REG_PATH , 0, winreg.KEY_ALL_ACCESS)
+        ret = winreg.QueryValueEx(key, setting_item)[0]
+        if ret:
+            ret = json.loads(ret)
+    except Exception as e:
+        ret = {}
+    print(ret)
+    return ret
 
 def _get_trader_dir(temp_name: str):
     """
