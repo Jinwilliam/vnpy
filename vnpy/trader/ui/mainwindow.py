@@ -26,6 +26,7 @@ from .widget import (
     AboutDialog,
     GlobalDialog
 )
+from ..setting import SETTINGS
 from ..engine import MainEngine
 from ..utility import get_icon_path
 
@@ -67,20 +68,13 @@ class MainWindow(QtWidgets.QMainWindow):
     def init_dock(self):
         """"""
         QShortcut(QKeySequence("F1"), self, self.special_key)
-        trading_widget, trading_dock = self.create_dock(
-            TradingWidget, "交易1", QtCore.Qt.TopDockWidgetArea
-        )
-        trading_widget2, trading_dock2 = self.create_dock(
-            TradingWidget, "交易2", QtCore.Qt.TopDockWidgetArea
-        )
-        trading_widget3, trading_dock3 = self.create_dock(
-            TradingWidget, "交易3", QtCore.Qt.TopDockWidgetArea
-        )
-
-        trading_widget4, trading_dock4 = self.create_dock(
-            TradingWidget, "交易4", QtCore.Qt.TopDockWidgetArea
-        )
-
+        trading_boards_cnt = SETTINGS.get('tradeagent.trading_boards', 4)
+        self.trading_boards = dict()
+        self.trading_docks = dict()
+        for i in range(trading_boards_cnt):
+            self.trading_boards[i], self.trading_docks[i] = self.create_dock(
+                TradingWidget, "交易{}".format(i+1), QtCore.Qt.TopDockWidgetArea
+            )
 
         account_widget, account_dock = self.create_dock(
             AccountMonitor, "资金", QtCore.Qt.BottomDockWidgetArea
@@ -127,9 +121,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.add_menu_action(sys_menu, "退出", "exit.ico", self.close)
 
-        # App menu
-        #app_menu = bar.addMenu("功能")
-
         all_apps = self.main_engine.get_all_apps()
         for app in all_apps:
             ui_module = import_module(app.app_module + ".ui")
@@ -137,12 +128,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
             func = partial(self.open_widget, widget_class, app.app_name)
             icon_path = str(app.app_path.joinpath("ui", app.icon_name))
-            #self.add_menu_action(
-            #    app_menu, app.display_name, icon_path, func
-            #)
-            #self.add_toolbar_action(
-            #    app.display_name, icon_path, func
-            #)
 
         # Global setting editor
         action = QtWidgets.QAction("配置", self)
@@ -158,25 +143,14 @@ class MainWindow(QtWidgets.QMainWindow):
             "contract.ico",
             partial(self.open_widget, ContractManager, "contract"),
         )
-        self.add_toolbar_action(
-            "查询合约",
-            "contract.ico",
-            partial(self.open_widget, ContractManager, "contract")
-        )
+        #self.add_toolbar_action(
+        #    "查询合约",
+        #    "contract.ico",
+        #    partial(self.open_widget, ContractManager, "contract")
+        #)
 
         self.add_menu_action(
             help_menu, "还原窗口", "restore.ico", self.restore_window_setting
-        )
-
-        #self.add_menu_action(
-        #    help_menu, "测试邮件", "email.ico", self.send_test_email
-        #)
-
-        #self.add_menu_action(
-        #    help_menu, "社区论坛", "forum.ico", self.open_forum
-        #)
-        self.add_toolbar_action(
-            "社区论坛", "forum.ico", self.open_forum
         )
 
         self.add_menu_action(

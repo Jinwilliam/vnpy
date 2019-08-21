@@ -229,9 +229,9 @@ class BaseMonitor(QtWidgets.QTableWidget):
         resize_action.triggered.connect(self.resize_columns)
         self.menu.addAction(resize_action)
 
-        save_action = QtWidgets.QAction("保存数据", self)
-        save_action.triggered.connect(self.save_csv)
-        self.menu.addAction(save_action)
+        #save_action = QtWidgets.QAction("保存数据", self)
+        #save_action.triggered.connect(self.save_csv)
+        #self.menu.addAction(save_action)
 
     def register_event(self):
         """
@@ -555,7 +555,7 @@ class ConnectDialog(QtWidgets.QDialog):
                 field_value = field_type(widget.text())
             setting[field_name] = field_value
 
-        save_json(self.filename, setting)
+        write_reg(self.filename, setting)
 
         self.main_engine.connect(setting, self.gateway_name)
 
@@ -647,8 +647,9 @@ class TradingWidget(QtWidgets.QWidget):
 
     def register_event(self):
         """"""
-        self.signal_tick.connect(self.process_tick_event)
-        self.event_engine.register(EVENT_TICK, self.signal_tick.emit)
+        pass
+        #self.signal_tick.connect(self.process_tick_event)
+        #self.event_engine.register(EVENT_TICK, self.signal_tick.emit)
 
     def process_tick_event(self, event: Event):
         """"""
