@@ -21,7 +21,7 @@ from ..event import (
     EVENT_LOG
 )
 from ..object import OrderRequest, SubscribeRequest
-from ..utility import load_json, save_json, write_reg, get_reg
+from ..utility import write_reg, get_reg
 from ..setting import SETTING_FILENAME, SETTINGS, SETTINGS_CN
 
 
@@ -620,85 +620,19 @@ class TradingWidget(QtWidgets.QWidget):
         self.gateway_combo = QtWidgets.QComboBox()
         self.gateway_combo.addItems(self.main_engine.get_all_gateway_names())
 
-        send_button = QtWidgets.QPushButton("委托")
-        send_button.clicked.connect(self.send_order)
-
-        cancel_button = QtWidgets.QPushButton("全撤")
-        cancel_button.clicked.connect(self.cancel_all)
-
         form1 = QtWidgets.QFormLayout()
         form1.addRow("交易所", self.exchange_combo)
         form1.addRow("代码", self.symbol_line)
         form1.addRow("名称", self.name_line)
         form1.addRow("方向", self.direction_combo)
-        #form1.addRow("开平", self.offset_combo)
         form1.addRow("类型", self.order_type_combo)
         form1.addRow("价格", self.price_line)
         form1.addRow("数量", self.volume_line)
         form1.addRow("接口", self.gateway_combo)
-        #form1.addRow(send_button)
-        #form1.addRow(cancel_button)
-
-        # Market depth display area
-        """
-        bid_color = "rgb(255,174,201)"
-        ask_color = "rgb(160,255,160)"
-
-        self.bp1_label = self.create_label(bid_color)
-        self.bp2_label = self.create_label(bid_color)
-        self.bp3_label = self.create_label(bid_color)
-        self.bp4_label = self.create_label(bid_color)
-        self.bp5_label = self.create_label(bid_color)
-
-        self.bv1_label = self.create_label(
-            bid_color, alignment=QtCore.Qt.AlignRight)
-        self.bv2_label = self.create_label(
-            bid_color, alignment=QtCore.Qt.AlignRight)
-        self.bv3_label = self.create_label(
-            bid_color, alignment=QtCore.Qt.AlignRight)
-        self.bv4_label = self.create_label(
-            bid_color, alignment=QtCore.Qt.AlignRight)
-        self.bv5_label = self.create_label(
-            bid_color, alignment=QtCore.Qt.AlignRight)
-
-        self.ap1_label = self.create_label(ask_color)
-        self.ap2_label = self.create_label(ask_color)
-        self.ap3_label = self.create_label(ask_color)
-        self.ap4_label = self.create_label(ask_color)
-        self.ap5_label = self.create_label(ask_color)
-
-        self.av1_label = self.create_label(
-            ask_color, alignment=QtCore.Qt.AlignRight)
-        self.av2_label = self.create_label(
-            ask_color, alignment=QtCore.Qt.AlignRight)
-        self.av3_label = self.create_label(
-            ask_color, alignment=QtCore.Qt.AlignRight)
-        self.av4_label = self.create_label(
-            ask_color, alignment=QtCore.Qt.AlignRight)
-        self.av5_label = self.create_label(
-            ask_color, alignment=QtCore.Qt.AlignRight)
-
-        self.lp_label = self.create_label()
-        self.return_label = self.create_label(alignment=QtCore.Qt.AlignRight)
-
-        form2 = QtWidgets.QFormLayout()
-        form2.addRow(self.ap5_label, self.av5_label)
-        form2.addRow(self.ap4_label, self.av4_label)
-        form2.addRow(self.ap3_label, self.av3_label)
-        form2.addRow(self.ap2_label, self.av2_label)
-        form2.addRow(self.ap1_label, self.av1_label)
-        form2.addRow(self.lp_label, self.return_label)
-        form2.addRow(self.bp1_label, self.bv1_label)
-        form2.addRow(self.bp2_label, self.bv2_label)
-        form2.addRow(self.bp3_label, self.bv3_label)
-        form2.addRow(self.bp4_label, self.bv4_label)
-        form2.addRow(self.bp5_label, self.bv5_label)
-        """
 
         # Overall layout
         vbox = QtWidgets.QVBoxLayout()
         vbox.addLayout(form1)
-        #vbox.addLayout(form2)
         self.setLayout(vbox)
 
     def create_label(self, color: str = "", alignment: int = QtCore.Qt.AlignLeft):
