@@ -583,7 +583,8 @@ class TradingWidget(QtWidgets.QWidget):
 
     def init_ui(self):
         """"""
-        self.setFixedWidth(300)
+        #self.setFixedWidth(300)
+        self.setMaximumHeight(300)
 
         # Trading function area
         exchanges = self.main_engine.get_all_exchanges()
@@ -630,7 +631,7 @@ class TradingWidget(QtWidgets.QWidget):
         form1.addRow("代码", self.symbol_line)
         form1.addRow("名称", self.name_line)
         form1.addRow("方向", self.direction_combo)
-        form1.addRow("开平", self.offset_combo)
+        #form1.addRow("开平", self.offset_combo)
         form1.addRow("类型", self.order_type_combo)
         form1.addRow("价格", self.price_line)
         form1.addRow("数量", self.volume_line)
@@ -639,6 +640,7 @@ class TradingWidget(QtWidgets.QWidget):
         form1.addRow(cancel_button)
 
         # Market depth display area
+        """
         bid_color = "rgb(255,174,201)"
         ask_color = "rgb(160,255,160)"
 
@@ -691,11 +693,12 @@ class TradingWidget(QtWidgets.QWidget):
         form2.addRow(self.bp3_label, self.bv3_label)
         form2.addRow(self.bp4_label, self.bv4_label)
         form2.addRow(self.bp5_label, self.bv5_label)
+        """
 
         # Overall layout
         vbox = QtWidgets.QVBoxLayout()
         vbox.addLayout(form1)
-        vbox.addLayout(form2)
+        #vbox.addLayout(form2)
         self.setLayout(vbox)
 
     def create_label(self, color: str = "", alignment: int = QtCore.Qt.AlignLeft):
