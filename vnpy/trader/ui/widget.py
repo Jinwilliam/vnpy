@@ -593,7 +593,7 @@ class TradingWidget(QtWidgets.QWidget):
         hist_exchange_combo = custom_data.get("exchange", None)
         if hist_exchange_combo:
             self.exchange_combo.addItem(custom_data.get("exchange", ""))
-        self.exchange_combo.addItems([exchange.value for exchange in exchanges if exchange != hist_exchange_combo])
+        self.exchange_combo.addItems([exchange.value for exchange in exchanges if exchange.value != hist_exchange_combo])
 
         self.symbol_line = QtWidgets.QLineEdit()
         self.symbol_line.returnPressed.connect(self.set_vt_symbol)
@@ -628,7 +628,7 @@ class TradingWidget(QtWidgets.QWidget):
         form1.addRow("交易所", self.exchange_combo)
         form1.addRow("代码", self.symbol_line)
         form1.addRow("名称", self.name_line)
-        form1.addRow("方向", self.direction_combo)
+        #form1.addRow("方向", self.direction_combo)
         form1.addRow("类型", self.order_type_combo)
         form1.addRow("价格", self.price_line)
         form1.addRow("数量", self.volume_line)
@@ -761,7 +761,7 @@ class TradingWidget(QtWidgets.QWidget):
         self.ap4_label.setText("")
         self.ap5_label.setText("")
 
-    def send_order(self):
+    def send_order(self, direction):
         """
         Send new order manually.
         """
@@ -785,7 +785,7 @@ class TradingWidget(QtWidgets.QWidget):
         req = OrderRequest(
             symbol=symbol,
             exchange=Exchange(str(self.exchange_combo.currentText())),
-            direction=Direction(str(self.direction_combo.currentText())),
+            direction=direction,
             type=OrderType(str(self.order_type_combo.currentText())),
             volume=volume,
             price=price,

@@ -10,6 +10,7 @@ from typing import Callable
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtWidgets import QShortcut
+from ..constant import Direction
 
 from vnpy.event import EventEngine
 from .widget import (
@@ -57,17 +58,25 @@ class MainWindow(QtWidgets.QMainWindow):
         self.init_menu()
         self.load_window_setting("custom")
 
-    def special_key(self):
+    def special_buy(self):
         widget_bind = self.focusWidget()
         widget_parent = widget_bind.parent()
         widget_parent_type = type(widget_parent)
         if widget_parent_type == TradingWidget:
             #print(widget_bind)
-            widget_parent.send_order()
+            widget_parent.send_order(Direction.LONG)
+    def special_sell(self):
+        widget_bind = self.focusWidget()
+        widget_parent = widget_bind.parent()
+        widget_parent_type = type(widget_parent)
+        if widget_parent_type == TradingWidget:
+            #print(widget_bind)
+            widget_parent.send_order(Direction.SHORT)
 
     def init_dock(self):
         """"""
-        QShortcut(QKeySequence("F1"), self, self.special_key)
+        QShortcut(QKeySequence("F1"), self, self.special_buy)
+        QShortcut(QKeySequence("F2"), self, self.special_sell)
         trading_boards_cnt = SETTINGS.get('tradeagent.trading_boards', 4)
         self.trading_boards = dict()
         self.trading_docks = dict()
